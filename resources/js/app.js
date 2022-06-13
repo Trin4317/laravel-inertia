@@ -4,18 +4,22 @@ import { InertiaProgress } from '@inertiajs/progress'
 import Layout from './Shared/Layout';
 
 createInertiaApp({
-  resolve: name => {
-      let page = require(`./Pages/${name}`).default;
+    resolve: async name => {
+        // Dynamically import Pages components //
+        // `import` will return a Promise, so we can't call default
+        // right after since it has to be fetched first,
+        // which is why we use async-await
+        let page = (await import(`./Pages/${name}`)).default;
 
-      page.layout ??= Layout;
+        page.layout ??= Layout;
 
-      return page;
+        return page;
     },
-  setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .mount(el)
-  },
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mount(el)
+    },
 })
 
 InertiaProgress.init({
