@@ -11,6 +11,11 @@ const mix = require('laravel-mix');
  |
  */
 
+// versioning individual app js files
+mix.webpackConfig({
+    output: { chunkFilename: "js/app/[name].js?id=[chunkhash]" }
+});
+
 mix.js('resources/js/app.js', 'public/js')
     .extract()
     .vue(3)
