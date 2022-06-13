@@ -20,6 +20,8 @@ createInertiaApp({
             .use(plugin)
             .mount(el)
     },
+    // set the title template using title defined in each Pages
+    title: title => `${title} - My App`,
 })
 
 InertiaProgress.init({
