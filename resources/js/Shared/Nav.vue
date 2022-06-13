@@ -14,10 +14,6 @@
     </nav>
 </template>
 
-<script>
+<script setup>
 import NavLink from '../Shared/NavLink';
-
-export default {
-    components: { NavLink },
-};
 </script>
