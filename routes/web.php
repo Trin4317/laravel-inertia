@@ -20,8 +20,11 @@ Route::get('/', function () {
 
 Route::get('/users', function () {
     return inertia('Users', [
-        'users' => User::all()->map(fn($user) => [
-            // pass only the required information so it wont get exposed in client side
+        // using `map` here would return a new Array instead of Collection
+        // which means we wont have access to Links property that is neccessary for Pagination
+        // instead, we can use `through` to keep the same Collection and manipulate only the users.data Array
+        'users' => User::paginate(10)->through(fn($user) => [
+            'id' => $user->id,
             'name' => $user->name
         ])
     ]);
