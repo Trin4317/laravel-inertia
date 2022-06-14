@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,10 @@ Route::get('/', function () {
 
 Route::get('/users', function () {
     return inertia('Users', [
-        'time' => now()->toTimeString()
+        'users' => User::all()->map(fn($user) => [
+            // pass only the required information so it wont get exposed in client side
+            'name' => $user->name
+        ])
     ]);
 });
 
