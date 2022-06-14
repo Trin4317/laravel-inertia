@@ -20,11 +20,7 @@ Route::get('/', function () {
 
 Route::get('/users', function () {
     return inertia('Users', [
-        'users' => User::all()->map(fn($user) => [
-            // pass only the required information so it wont get exposed in client side
-            'id' => $user->id,
-            'name' => $user->name
-        ])
+        'users' => User::paginate(10)
     ]);
 });
 
