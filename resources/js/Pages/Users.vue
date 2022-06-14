@@ -36,24 +36,12 @@
         </div>
     </div>
 
-    <div class="mt-6">
-        <!-- <template v-for="link in users.links">
-            <Link v-if="link.url" :href="link.url" v-html="link.label" />
-            <span v-else v-html="link.label"></span>
-        </template> -->
-        <Component
-            :is="link.url ? Link : 'span'"
-            v-for="link in users.links"
-            :href="link.url"
-            v-html="link.label"
-            class="px-1"
-            :class="{ 'text-gray-500' : !link.url, 'font-bold' : link.active }"
-        />
-    </div>
+    <Pagination :links="users.links" class="mt-6" />
 </template>
 
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3';
+import Pagination from '../Shared/Pagination';
 
 defineProps({
     users: Object,
