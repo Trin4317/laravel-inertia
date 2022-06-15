@@ -23,10 +23,20 @@ Route::get('/users', function () {
         // using `map` here would return a new Array instead of Collection
         // which means we wont have access to Links property that is neccessary for Pagination
         // instead, we can use `through` to keep the same Collection and manipulate only the users.data Array
-        'users' => User::paginate(10)->through(fn($user) => [
-            'id' => $user->id,
-            'name' => $user->name
-        ])
+        'users' => User::query()
+            // when there is a "search" key in the request
+            // append to the query what's inside the closure
+            ->when(request()->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(10)
+            // include the query string in paginate URL
+            ->withQueryString()
+            ->through(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name
+            ]),
+        'filters' => request()->only(['search'])
     ]);
 });
 

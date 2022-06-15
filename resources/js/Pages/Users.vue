@@ -3,7 +3,10 @@
     <Head>
         <title>Users</title>
     </Head>
-    <h1 class="text-3xl mb-6">Users</h1>
+    <div class="flex justify-between mb-6">
+        <h1 class="text-3xl">Users</h1>
+        <input v-model="search" type="text" placeholder="Search..." class="border px-2 rounded-lg" />
+    </div>
 
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -42,8 +45,23 @@
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import Pagination from '../Shared/Pagination';
+import { ref, watch } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
-defineProps({
+let props = defineProps({
     users: Object,
+    filters: Object,
+});
+
+let search = ref(props.filters.search);
+
+watch(search, value => {
+    // when there is a change in `search` value, perform an AJAX get request with query string
+    Inertia.get('/users', { search: value }, {
+        // to prevent the page from re-rendering after sending AJAX request, use preserveState option
+        preserveState: true,
+        // replace old AJAX get request with a new one entirely so it doesnt make multiple entries in Back menu
+        replace: true
+    });
 });
 </script>
