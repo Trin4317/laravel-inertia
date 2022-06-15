@@ -11,7 +11,9 @@
                 Name
             </label>
 
-            <input v-model="form.name" class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" required>
+            <input v-model="form.name" class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" >
+
+            <div v-if="$page.props.errors.name" v-text="$page.props.errors.name" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
@@ -19,7 +21,9 @@
                 Email
             </label>
 
-            <input v-model="form.email" class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" required>
+            <input v-model="form.email" class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" >
+
+            <div v-if="$page.props.errors.email" v-text="$page.props.errors.email" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
@@ -27,7 +31,9 @@
                 password
             </label>
 
-            <input v-model="form.password" class="border border-gray-400 p-2 w-full" type="password" name="password" id="password" required>
+            <input v-model="form.password" class="border border-gray-400 p-2 w-full" type="password" name="password" id="password" >
+
+            <div v-if="$page.props.errors.password" v-text="$page.props.errors.password" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
