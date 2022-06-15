@@ -12,6 +12,8 @@
             </label>
 
             <input v-model="form.name" class="border border-gray-400 p-2 w-full" type="text" name="name" id="name" required>
+
+            <div v-if="errors.name" v-text="errors.name" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
@@ -20,6 +22,8 @@
             </label>
 
             <input v-model="form.email" class="border border-gray-400 p-2 w-full" type="email" name="email" id="email" required>
+
+            <div v-if="errors.email" v-text="errors.email" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
@@ -28,6 +32,8 @@
             </label>
 
             <input v-model="form.password" class="border border-gray-400 p-2 w-full" type="password" name="password" id="password" required>
+
+            <div v-if="errors.password" v-text="errors.password" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
@@ -43,6 +49,10 @@
 import { Head } from '@inertiajs/inertia-vue3';
 import { reactive } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+
+defineProps({
+    errors: Object
+});
 
 let form = reactive({
     name: '',
