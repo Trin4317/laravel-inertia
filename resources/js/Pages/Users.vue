@@ -48,11 +48,12 @@ import Pagination from '../Shared/Pagination';
 import { ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 
-defineProps({
+let props = defineProps({
     users: Object,
+    filters: Object,
 });
 
-let search = ref('');
+let search = ref(props.filters.search);
 
 watch(search, value => {
     // when there is a change in `search` value, perform an AJAX get request with query string
