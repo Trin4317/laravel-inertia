@@ -47,6 +47,7 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import Pagination from '../Shared/Pagination';
 import { ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+import throttle from 'lodash/throttle';
 
 let props = defineProps({
     users: Object,
@@ -55,7 +56,9 @@ let props = defineProps({
 
 let search = ref(props.filters.search);
 
-watch(search, value => {
+// throttle the AJAX get request
+// at most trigger the function once every 1000ms
+watch(search, throttle(function (value) {
     // when there is a change in `search` value, perform an AJAX get request with query string
     Inertia.get('/users', { search: value }, {
         // to prevent the page from re-rendering after sending AJAX request, use preserveState option
@@ -63,5 +66,5 @@ watch(search, value => {
         // replace old AJAX get request with a new one entirely so it doesnt make multiple entries in Back menu
         replace: true
     });
-});
+}, 1000));
 </script>
