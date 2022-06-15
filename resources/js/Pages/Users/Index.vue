@@ -44,7 +44,7 @@
 
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import Pagination from '../Shared/Pagination';
+import Pagination from '../../Shared/Pagination';
 import { ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import debounce from 'lodash/debounce';
