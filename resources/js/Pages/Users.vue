@@ -59,7 +59,9 @@ watch(search, value => {
     // when there is a change in `search` value, perform an AJAX get request with query string
     Inertia.get('/users', { search: value }, {
         // to prevent the page from re-rendering after sending AJAX request, use preserveState option
-        preserveState: true
+        preserveState: true,
+        // replace old AJAX get request with a new one entirely so it doesnt make multiple entries in Back menu
+        replace: true
     });
 });
 </script>
