@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/users', function () {
-    return inertia('Users', [
+    return inertia('Users/Index', [
         // using `map` here would return a new Array instead of Collection
         // which means we wont have access to Links property that is neccessary for Pagination
         // instead, we can use `through` to keep the same Collection and manipulate only the users.data Array
@@ -38,6 +38,22 @@ Route::get('/users', function () {
             ]),
         'filters' => request()->only(['search'])
     ]);
+});
+
+Route::post('/users', function () {
+    $attributes = request()->validate([
+        'name' => 'required',
+        'email' => ['required','email'],
+        'password' => 'required'
+    ]);
+
+    User::create($attributes);
+
+    return redirect('/users');
+});
+
+Route::get('/users/create', function () {
+    return inertia('Users/Create');
 });
 
 Route::get('/settings', function () {
