@@ -45,11 +45,20 @@
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import Pagination from '../Shared/Pagination';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
 defineProps({
     users: Object,
 });
 
 let search = ref('');
+
+watch(search, value => {
+    // when there is a change in `search` value, perform an AJAX get request with query string
+    Inertia.get('/users', { search: value }, {
+        // to prevent the page from re-rendering after sending AJAX request, use preserveState option
+        preserveState: true
+    });
+});
 </script>
