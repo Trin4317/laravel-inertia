@@ -37,7 +37,7 @@
         </div>
 
         <div class="mb-6">
-            <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500">
+            <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500" :disabled="processing">
                 Submit
             </button>
         </div>
@@ -47,7 +47,7 @@
 
 <script setup>
 import { Head } from '@inertiajs/inertia-vue3';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 
 defineProps({
@@ -60,7 +60,13 @@ let form = reactive({
     password: ''
 });
 
+let processing = ref(false);
+
 let submit = () => {
-    Inertia.post('/users', form);
+    Inertia.post('/users', form, {
+        // use event hook to set `processing` attribute's value
+        onStart: () => { processing.value = true },
+        onFinish: () => { processing.value = false },
+    });
 };
 </script>
