@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('login', [LoginController::class, 'create'])->name('login');
+
+Route::post('login', [LoginController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
