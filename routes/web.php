@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,10 @@ Route::middleware('auth')->group(function () {
                     'id' => $user->id,
                     'name' => $user->name
                 ]),
-            'filters' => request()->only(['search'])
+            'filters' => request()->only(['search']),
+            'can' => [
+                'createUser' => Auth::user()->email === 'ollei@example.com'
+            ]
         ]);
     });
 
