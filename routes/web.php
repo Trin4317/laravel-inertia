@@ -69,7 +69,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users/create', function () {
         return inertia('Users/Create');
-    })->middleware('can:create,App\Models\User');
+    })->can('create', User::class);
+    //->middleware('can:create,App\Models\User');
 
     Route::get('/settings', function () {
         return inertia('Settings');
