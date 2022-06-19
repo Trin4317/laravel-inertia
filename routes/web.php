@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,15 @@ Route::middleware('auth')->group(function () {
                 ->withQueryString()
                 ->through(fn ($user) => [
                     'id' => $user->id,
-                    'name' => $user->name
+                    'name' => $user->name,
+                    'can' => [
+                        'update' => Auth::user()->can('update', $user)
+                    ]
                 ]),
-            'filters' => request()->only(['search'])
+            'filters' => request()->only(['search']),
+            'can' => [
+                'createUser' => Auth::user()->can('create', User::class)
+            ]
         ]);
     });
 
@@ -62,7 +69,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users/create', function () {
         return inertia('Users/Create');
-    });
+    })->can('create', User::class);
+    //->middleware('can:create,App\Models\User');
 
     Route::get('/settings', function () {
         return inertia('Settings');
