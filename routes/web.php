@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,52 +15,56 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
-    return inertia('Home');
-});
+Route::get('login', [LoginController::class, 'create'])->name('login');
 
-Route::get('/users', function () {
-    return inertia('Users/Index', [
-        // using `map` here would return a new Array instead of Collection
-        // which means we wont have access to Links property that is neccessary for Pagination
-        // instead, we can use `through` to keep the same Collection and manipulate only the users.data Array
-        'users' => User::query()
-            // when there is a "search" key in the request
-            // append to the query what's inside the closure
-            ->when(request()->input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10)
-            // include the query string in paginate URL
-            ->withQueryString()
-            ->through(fn($user) => [
-                'id' => $user->id,
-                'name' => $user->name
-            ]),
-        'filters' => request()->only(['search'])
-    ]);
-});
+Route::post('login', [LoginController::class, 'store']);
 
-Route::post('/users', function () {
-    $attributes = request()->validate([
-        'name' => 'required',
-        'email' => ['required','email'],
-        'password' => 'required'
-    ]);
+Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth');
 
-    User::create($attributes);
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return inertia('Home');
+    });
 
-    return redirect('/users');
-});
+    Route::get('/users', function () {
+        return inertia('Users/Index', [
+            // using `map` here would return a new Array instead of Collection
+            // which means we wont have access to Links property that is neccessary for Pagination
+            // instead, we can use `through` to keep the same Collection and manipulate only the users.data Array
+            'users' => User::query()
+                // when there is a "search" key in the request
+                // append to the query what's inside the closure
+                ->when(request()->input('search'), function ($query, $search) {
+                    $query->where('name', 'like', "%{$search}%");
+                })
+                ->paginate(10)
+                // include the query string in paginate URL
+                ->withQueryString()
+                ->through(fn ($user) => [
+                    'id' => $user->id,
+                    'name' => $user->name
+                ]),
+            'filters' => request()->only(['search'])
+        ]);
+    });
 
-Route::get('/users/create', function () {
-    return inertia('Users/Create');
-});
+    Route::post('/users', function () {
+        $attributes = request()->validate([
+            'name' => 'required',
+            'email' => ['required', 'email'],
+            'password' => 'required'
+        ]);
 
-Route::get('/settings', function () {
-    return inertia('Settings');
-});
+        User::create($attributes);
 
-Route::post('/logout', function () {
-    dd('logging the user out');
+        return redirect('/users');
+    });
+
+    Route::get('/users/create', function () {
+        return inertia('Users/Create');
+    });
+
+    Route::get('/settings', function () {
+        return inertia('Settings');
+    });
 });
