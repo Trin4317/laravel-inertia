@@ -52,7 +52,8 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        // randomly decide if $user can update a specific $model or not
+        return (bool) mt_rand(0, 1);
     }
 
     /**
